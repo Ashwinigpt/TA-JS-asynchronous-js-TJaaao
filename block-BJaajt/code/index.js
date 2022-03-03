@@ -1,3 +1,5 @@
+// Github user
+
 const input = document.querySelector('input');
 const image = document.querySelector('.img-user');
 const name = document.querySelector('h2');
@@ -35,6 +37,7 @@ function handleChange(event) {
 
 input.addEventListener('keyup', handleChange);
 
+// Random Cat
 
 const img = document.querySelector('.img-cat');
 const reload = document.querySelector('button');
