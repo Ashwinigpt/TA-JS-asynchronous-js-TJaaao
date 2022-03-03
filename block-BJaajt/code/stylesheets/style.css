@@ -15,6 +15,16 @@ img{
 }
 li{
     list-style: none;
-}input{
+}
+input{
     padding: 1rem;
+}
+.following img{
+    border-radius: 50%;
+} 
+.followers img{
+    border-radius: 50%;
+}
+button{
+    background-color: aqua;
 }
