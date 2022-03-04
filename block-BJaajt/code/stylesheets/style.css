@@ -1,0 +1,30 @@
+h1{
+    background-color: black;
+    color: white;
+    padding: 1.2rem;
+}
+img{
+    width: 100px;
+    height: 100px;
+}
+.img-user{
+    border-radius: 50%;
+}
+.section-1{
+    text-align: center;
+}
+li{
+    list-style: none;
+}
+input{
+    padding: 1rem;
+}
+.following img{
+    border-radius: 50%;
+} 
+.followers img{
+    border-radius: 50%;
+}
+button{
+    background-color: aqua;
+}
