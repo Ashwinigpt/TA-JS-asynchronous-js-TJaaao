@@ -7,7 +7,7 @@ const userId = document.querySelector('p');
 const followers = document.querySelector('.followers');
 const following = document.querySelector('.following');
 const imgFollowers = document.querySelector('.img-followers');
-const imgFollowing = document.querySelector('.img-following')
+const imgFollowing = document.querySelector('.img-following');
 
 function displayUI(data) {
   image.src = data.avatar_url;
@@ -15,8 +15,6 @@ function displayUI(data) {
   userId.innerText = '@' + data.login;
   following.innerText = `Following: ${data.following}`;
   followers.innerText = `Followers: ${data.followers}`;
-  imgFollowers.src = data.followers_url;
-  imgFollowing.src = data.following_url;
 }
 
 function handleChange(event) {
