@@ -2,20 +2,30 @@
 
 ```js
 let value = new Promise((resolve, reject) => {
-    setTimeout
-})
+    setTimeout(() =>{
+        resolve('Promise Resolved!');
+    }, 1000)
+});
+promise.then(console.log);
 ```
 
 2. Create another promise. Now have it reject with a value of `Rejected Promise!` without using `setTimeout`. Print the contents of the promise after it has been rejected by passing console.log to `.catch`
 
 ```js
-// Your code
+let promise = new Promise ((resolve, reject) => {
+    reject('Rejected Promise!');
+});
+promise.catch(console.log);
 ```
 
 3. Create another promise. Now have it reject with a value of `Rejected Promise!` without using `setTimeout`. Print the contents of the promise after it has been rejected by passing console.log to `.catch` and also use `.finally` to log message `Promise Settled!`.
 
 ```js
-// Your code
+let promise = new Promise ((resolve, reject) => {
+    reject('Rejected Promise!');
+});
+promise.catch(console.log).finally(() => {console.log(`Promise Settled!`)});
+
 ```
 
 4. What will be the output of the code below.
@@ -40,8 +50,13 @@ console.log('D');
 
 ```js
 function wait(time){
-    
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve('Get resolved')
+        }, time)
+    });
 }
+wait(1000).then(console.log);
 ```
 
 6. Do the following:
@@ -54,7 +69,24 @@ function wait(time){
 - Catch the error using `.catch`
 
 ```js
-// Your code
+let promise = new Promise ((resolve, reject) => {
+    resolve(21);
+})
+  .then((value) => {
+    console.log(value);
+    return value + 10;
+  })
+  .then((value) => {
+    console.log(value);
+    return value + 100;
+  })
+  .then((value) => {
+    console.log(value);
+    if(value > 100){
+      throw new Error('Something went wrong!')
+    }
+  })
+  .catch(console.log);
 ```
 
 7. Do the following:
@@ -66,7 +98,24 @@ function wait(time){
 - Use `.then` and log the value
 
 ```js
-// Your code
+let promise = new Promise((resolve, reject) => {
+    resolve(['A']);
+})
+  .then((value) => {
+    console.log(value);
+    return value.concat('B');
+  })
+  .then((value) => {
+    console.log(value);
+    return value.reduce((acc, cv, index) => {
+        acc[index] = cv;
+        return acc;
+    }, {};
+  })
+  .then((value) => {
+    console.log(value);
+  })
+  
 ```
 
 8. Do the following:
@@ -77,7 +126,21 @@ function wait(time){
 - Chain `.then` on above and return `4` also check the value you get access to by logging
 
 ```js
-// Your code
+let first = new Promise((resolve, reject) => {
+    resolve(1);
+})
+  first.then((value) => {
+    console.log(value);
+    return 2;
+  })
+  .then((value) => {
+    console.log(value);
+    return 3;
+  })
+  .then((value) => {
+    console.log(value);
+    return 4;
+  })
 ```
 
 9. Do the following:
@@ -88,10 +151,26 @@ function wait(time){
 - Use `.then` on `first` and return `4` also check the value you get access to by logging
 
 ```js
-// Your code
+let first = new Promise((resolve, reject) => {
+    resolve(1);
+})
+  first.then((value) => {
+    console.log(value);
+    return 2;
+  })
+  first.then((value) => {
+    console.log(value);
+    return 3;
+  })
+  first.then((value) => {
+    console.log(value);
+    return 4;
+  })
 ```
 
 10. Try to understand the difference between the problem 8 and 9. Write your observation.
+
+Ans - problem 8 is promise chain and problem 9 is multiple handler on the same promise.
 
 11. Do the following
 
@@ -101,5 +180,17 @@ function wait(time){
 - Use `.then` to log the value
 
 ```js
-// Your code
+let promise = new Promise ((resolve, reject) => {
+    resolve('John');
+})
+  .then((value) => {
+    return Promise.resolve('Arya');
+    })
+    .then((value) =>{
+        console.log(value);
+        return new Promise((resolve, reject) => {
+          setTimeout(() => resolve('Bran'), 2000)
+        });  
+    }) 
+    .then(console.log)
 ```
