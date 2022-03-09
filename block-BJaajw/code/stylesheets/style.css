@@ -1,0 +1,39 @@
+h1{
+    background-color: black;
+    color: #fff;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 1rem;
+}
+img{
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+}
+.flex{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+button{
+    color: #fff;
+    background-color: black;
+    margin-bottom: 5rem;
+}
+p{
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+main{
+    background-color: rgb(241,222,184);
+}
+h2{
+    background-color: rgb(54,126,127);
+    color: #fff;
+    width: 30%;
+    border-radius: 2rem;
+}
+.options{
+    text-align: center;
+    padding: 2rem;
+}
