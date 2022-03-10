@@ -2,16 +2,16 @@
 
 ```js
 const user1 = new Promise((resolve, reject) => {
-  setTimeout(() => resolve('Ashwini'), 1000)
+  setTimeout(() => resolve(Math.random()), 1000)
 });
 const user2 = new Promise((resolve, reject) => {
-  setTimeout(() => resolve('Suman'), 2000)
+  setTimeout(() => resolve(Math.random()), 2000)
 });
 const user3 = new Promise((resolve, reject) => {
-  setTimeout(() => resolve('Saurabh'), 3000)
+  setTimeout(() => resolve(Math.random()), 3000)
 });
 const user4 = new Promise((resolve, reject) => {
-  setTimeout(() => resolve('Shweta'), 4000)
+  setTimeout(() => resolve(Math.random()), 4000)
 });
 
 let all = Promise.all([user1, user2, user3, user4])
@@ -29,13 +29,22 @@ const usernameData = Promise.all(
   usernames.map((user) => 
     fetch(`https://api.github.com/users/${user}`).then((res) => res.json())
   )
-).then((users) => console.log(users));
+).then((users) => {
+  users.forEach((user) => console.log(user.followers));
+});
 ```
 
 - Use `Promise.race` to see which API resolves faster from the given list of URLs. Log the object you get from the promise that is resolved faster.
 
   - https://random.dog/woof.json
   - https://aws.random.cat/meow
+
+  ```js
+  const one = fetch('https://random.dog/woof.json').then((res) => res.json());
+  const two = fetch('https://aws.random.cat/meow').then((res) => res.json());
+
+  Promise.race([one, two]).then(console.log);
+  ```
 
 - Use `Promise.allSettled` to log the value of each promise from the given list of promises. And also check if `Promise.all` works with `one`, `two` and `three` or not
 
