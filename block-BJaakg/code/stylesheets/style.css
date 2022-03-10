@@ -1,0 +1,17 @@
+h1{
+    text-align: center;
+}
+body{
+    background-image: linear-gradient(to right, rgb(116,94,178), rgb(104,124,227));
+}
+.book{
+    border: 1px dashed red;
+}
+.flex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+main{
+    background-color: white;
+}
