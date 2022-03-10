@@ -1,7 +1,22 @@
 let url = `https://api.spaceflightnewsapi.net/v3/articles?_limit=30`;
 let newsElm = document.querySelector('.news');
+let error = document.querySelector('.error');
 let select = document.querySelector('select');
 let allNews = [];
+let main = document.querySelector('main');
+let errorElm = document.querySelector('.error-message');
+
+function handleErrorMessage(message = 'Something went wrong') {
+    main.style.display = 'none';
+    errorElm.style.display = 'block';
+    errorElm.innerText = message;
+}
+
+function handleSpinner(status = false) {
+    if (status) {
+        newsElm.innerHTML = `<div class"spinner"><div class="donut"></div></div>`;
+    }
+}
 
 function renderNews(news) {
     newsElm.innerHTML = '';
@@ -36,24 +51,31 @@ function displayOptions(sources) {
     });
 }
 
-fetch(url).then((res) => {
-    if (!res.ok) {
-        throw new Error(`Error happend: ${res.status}`)
-    }
-    return res.json();
-}).then((news) => {
-    console.log(news);
-    allNews = news;
-    renderNews(news);
-    let allSources = Array.from(new Set(news.map((n) => n.newsSite)));
-    displayOptions(allSources);
-})
-    .catch((error) => {
-        newsElm.innerText = error;
+function init() {
+    handleSpinner(true);
+    fetch(url).then((res) => {
+        if (res.ok) {
+            return res.json()
+        } else {
+            throw new Error('Response not ok!')
+        }
     })
-    .finally(() => {
-        console.log('Finally!');
-    });
+        .then((news) => {
+            handleSpinner();
+            allNews = news;
+            renderNews(news);
+
+            let allSources = Array.from(new Set(news.map((n) => n.newsSite)));
+            displayOptions(allSources);
+        })
+        .catch((error) => {
+            handleErrorMessage(error);
+        })
+        .finally(() => {
+            handleSpinner();
+        });
+}
+
 
 select.addEventListener('change', (event) => {
     let source = event.target.value.trim();
@@ -64,3 +86,9 @@ select.addEventListener('change', (event) => {
     }
     renderNews(filteredNews);
 });
+
+if (navigator.onLine) {
+    init();
+} else {
+    handleErrorMessage('Check your internet connection ❌!');
+}
