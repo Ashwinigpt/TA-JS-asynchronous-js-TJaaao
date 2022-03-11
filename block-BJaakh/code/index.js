@@ -1,101 +1,113 @@
-function main(){
-    let inputText = document.querySelector('#text');
-    let root = document.querySelector('ul');
-    let active = document.querySelector('.active');
-    let completed = document.querySelector('.completed');
-    let clear = document.querySelector('.clear');
-    let all = document.querySelector('.all');
+let inputText = document.querySelector('#text');
+let root = document.querySelector('.todos');
+const baseURL = `https://sleepy-falls-37563.herokuapp.com/api/todo`;
 
-let allTodos = [];
 
-function handleInput(event){
-    let value = event.target.value
-    if(event.keyCode === 13 && event.target.value !== ""){
-        let todo = {
-            name : value,
-            isDone : false
+function handleInput(event) {
+    if (event.keyCode === 13 && event.target.value.trim()) {
+        let data = {
+            todo: {
+                title: event.target.value,
+                isCompleted: false,
+            },
         };
-        allTodos.push(todo);
-        event.target.value = "";
-
-        createUI();
+        fetch(baseURL + 'todo', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+        }).then(() => {
+            event.target.value = '';
+            displayTodos();
+        });
     }
 }
 
-function handleDelete(event) {
-    let id = event.target.dataset.id;
-    allTodos.splice(id, 1);
-     
-    createUI();
+function handleDelete(id) {
+    fetch(baseURL + `todo/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }).then(() => {
+        displayTodos();
+    });
 }
 
-function handleToggle(event){
-    let id = event.target.dataset.id;
-    allTodos[id].isDone = !allTodos[id].isDone;
-
-    createUI();
+function handleToggle(id, status) {
+    let data = {
+        todo: {
+            isCompleted: !status,
+        },
+    };
+    fetch(baseURL + `todo/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+    }).then(() => {
+        displayTodos();
+    });
 }
 
-function activeTodo(event){
-    createUI();
+function handleEdit(event, id, title) {
+    let input = document.querySelector('input');
+    input.value = title;
+    let p = event.target;
+    let parent = event.target.parentElement;
+    parent.replaceChild(input, p);
+    console.log(input, p, parent);
+
+    input.addEventListener('keyup', (event) => {
+        if (event.keyCode === 13 && event.target.value) {
+            let data = {
+                todo: {
+                    title: event.target.value,
+                },
+            };
+            fetch(baseURL + `todo/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+            }).then(() => {
+                displayTodos();
+            });
+        }
+    });
 }
 
-function completedTodo(event){
-    createUI();
-}
-
-
-function createUI(data = allTodos){
+function createUI(data) {
     root.innerHTML = "";
-    data.forEach((todo, index) => {
+    data.forEach((todo) => {
         let li = document.createElement('li');
-        li.style.display = "flex";
-        li.style.alignItems = "center";
         let input = document.createElement('input');
         input.type = "checkbox";
-        input.setAttribute("data-id", index);
-        input.addEventListener('input', handleToggle)
-        input.checked = todo.isDone;
+        input.checked = todo.isCompleted;
+        input.addEventListener('click', () => handleToggle(todo._id, todo.isCompleted));
+        input.setAttribute("data-id", todo._id);    
         let p = document.createElement('p');
-        p.innerText = todo.name;
-        if(input.checked === true){
-            p.style.textDecoration = "line-through";
-        }
+        p.innerText = todo.title;
+        p.addEventListener('dblclick', (event) => handleEdit(event, todo._id, todo.title));
         let span = document.createElement('span');
         span.innerText = "❌";
-        span.setAttribute("data-id", index);
-
-        span.addEventListener('click', handleDelete);
-
+        span.setAttribute("data-id", todo._id);
+        span.addEventListener('click', () => handleDelete(todo._id));
         li.append(input, p, span);
         root.append(li);
     });
 }
 
-createUI();
-
-clear.addEventListener('click', () => {
-    allTodos = allTodos.filter((todo) => !todo.isDone);
-    createUI();
-});
-
-completed.addEventListener('click', () => {
-    let Completed = allTodos.filter((todo) => todo.isDone);
-    createUI(Completed);
-})
-
-
-active.addEventListener('click', () => {
-    let unCompleted = allTodos.filter((todo) => !todo.isDone);
-    createUI(unCompleted);
-})
-
-all.addEventListener('click',() => {
-    let everyThing = allTodos.map((todo) => todo);
-    createUI(everyThing);
-})
-
-inputText.addEventListener("keyup", handleInput);
+function displayTodos() {
+    fetch(baseURL + 'todo')
+        .then((res) => res.json())
+        .then((allTodos) => {
+            createUI(allTodos.todos);
+        });
 }
 
-main();
+inputText.addEventListener("keyup", handleInput);
+displayTodos();
